@@ -1,0 +1,12 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="JStrunaBDRV1:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/JStrunaBDRV1_jar</output-path>
+    <root id="archive" name="JStrunaBDRV.jar">
+      <element id="module-output" name="JStrunaBDRV" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/antlr/antlr4-runtime/4.7/antlr4-runtime-4.7.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/microsoft/sqlserver/mssql-jdbc/7.0.0.jre8/mssql-jdbc-7.0.0.jre8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/firebirdsql/jdbc/jaybird-jdk18/3.0.5/jaybird-jdk18-3.0.5.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/javax/resource/connector-api/1.5/connector-api-1.5.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
