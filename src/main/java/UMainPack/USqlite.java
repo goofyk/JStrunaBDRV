@@ -55,8 +55,8 @@ public class USqlite {
         }
     }
 
-    public static ResultSet getAllData(int countTop) {
-        if(countTop == 0) countTop = 2000;
+    public static ResultSet getAllDataLogs(int countTop) {
+        if(countTop == 0) countTop = 200;
         String sql = "SELECT * FROM LOGS LIMIT " + countTop;
         Statement stmt = null;
         ResultSet rs = null;
@@ -78,9 +78,7 @@ public class USqlite {
         return rs;
     }
 
-    public static DefaultTableModel buildTableModel(int countTop) {
-
-        ResultSet rs = getAllData(countTop);
+    public static DefaultTableModel buildTableModel(ResultSet rs) {
 
         if(rs == null) return new DefaultTableModel();
 

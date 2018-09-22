@@ -5,6 +5,7 @@ import java.awt.event.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.ResultSet;
 import javax.swing.*;
 
 public class UFormMain extends JFrame {
@@ -19,9 +20,11 @@ public class UFormMain extends JFrame {
     private JButton buttonUpdateTable = createButton("Update table", dimSizeBtn);
     private JButton buttonRunInit = createButton("Run init", dimSizeBtn);
     private JButton buttonSettings = createButton("Settings", dimSizeBtn);
-    private JTable table = new JTable(USqlite.buildTableModel(0));
-    Timer timer = new Timer(1000, new actionListenerTimer());
+    private JTable table = new JTable(USqlite.buildTableModel(USqlite.getAllDataLogs(0)));
+    Timer timer = new Timer(10000, new actionListenerTimer());
     private String nameOfService = "StrunaBDRV";
+    private String pathRoot = System.getProperty("user.dir");
+    private String pathToFileOfService = pathRoot + "\\Service.exe";
 
     public UFormMain() {
 
@@ -62,6 +65,9 @@ public class UFormMain extends JFrame {
         container.add(BorderLayout.WEST, panelBtn);
 //        container.add(BorderLayout.CENTER, textArea);
         container.add(BorderLayout.CENTER, jscrlp);
+
+        timer.start();
+
     }
 
     private JButton createButton(String text, Dimension size) {
@@ -73,12 +79,12 @@ public class UFormMain extends JFrame {
     }
 
     private void updateTableLogs(int countTop){
-        table.setModel(USqlite.buildTableModel(countTop));
+        table.setModel(USqlite.buildTableModel(USqlite.getAllDataLogs(0)));
     }
 
     class ButtonEventListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            String message = System.getProperty("user.dir");
+            String message = pathRoot;
 //            message += "Button was pressed\n";
 //            message += "Text is " + input.getText() + "\n";
 //            message += (radio1.isSelected()?"Radio #1":"Radio #2")
@@ -95,7 +101,7 @@ public class UFormMain extends JFrame {
     class actionListenerTimer implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            System.out.println("WOW!");
+            updateTableLogs(200);
         }
     }
 
@@ -103,7 +109,7 @@ public class UFormMain extends JFrame {
         public void actionPerformed(ActionEvent e) {
             try {
                 updateNameService();
-                String command = System.getProperty("user.dir") + "\\nssm\\win64\\nssm.exe start " + nameOfService;
+                String command = pathRoot + "\\nssm\\win64\\nssm.exe start " + nameOfService;
                 Runtime.getRuntime().exec(command);
             } catch (IOException e1) {
                 e1.printStackTrace();
@@ -115,7 +121,7 @@ public class UFormMain extends JFrame {
         public void actionPerformed(ActionEvent e) {
             try {
                 updateNameService();
-                String command = System.getProperty("user.dir") + "\\nssm\\win64\\nssm.exe stop " + nameOfService;
+                String command = pathRoot + "\\nssm\\win64\\nssm.exe stop " + nameOfService;
                 Runtime.getRuntime().exec(command);
             } catch (IOException e1) {
                 e1.printStackTrace();
@@ -127,7 +133,7 @@ public class UFormMain extends JFrame {
         public void actionPerformed(ActionEvent e) {
             try {
                 updateNameService();
-                String command = System.getProperty("user.dir") + "\\nssm\\win64\\nssm.exe restart " + nameOfService;
+                String command = pathRoot + "\\nssm\\win64\\nssm.exe restart " + nameOfService;
                 Runtime.getRuntime().exec(command);
             } catch (IOException e1) {
                 e1.printStackTrace();
@@ -139,7 +145,7 @@ public class UFormMain extends JFrame {
         public void actionPerformed(ActionEvent e) {
             try {
                 updateNameService();
-                String command = System.getProperty("user.dir") + "\\nssm\\win64\\nssm.exe install " + nameOfService;
+                String command = pathRoot + "\\nssm\\win64\\nssm.exe install " + nameOfService + " " + pathToFileOfService;
                 Runtime.getRuntime().exec(command);
             } catch (IOException e1) {
                 e1.printStackTrace();
@@ -151,7 +157,7 @@ public class UFormMain extends JFrame {
         public void actionPerformed(ActionEvent e) {
             try {
                 updateNameService();
-                String command = System.getProperty("user.dir") + "\\nssm\\win64\\nssm.exe remove " + nameOfService;
+                String command = pathRoot + "\\nssm\\win64\\nssm.exe remove " + nameOfService;
                 Runtime.getRuntime().exec(command);
             } catch (IOException e1) {
                 e1.printStackTrace();
@@ -171,7 +177,7 @@ public class UFormMain extends JFrame {
             try {
                 updateNameService();
                 //String command = System.getProperty("user.dir") + "\\nssm\\win64\\nssm.exe status " + nameOfService;
-                String command = System.getProperty("user.dir") + "\\nssm\\win64\\nssm.exe status MySQL57";
+                String command = pathRoot + "\\nssm\\win64\\nssm.exe status MySQL57";
                 Process proc = Runtime.getRuntime().exec(command);
                 BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
                 BufferedReader stdError = new BufferedReader(new InputStreamReader(proc.getErrorStream()));

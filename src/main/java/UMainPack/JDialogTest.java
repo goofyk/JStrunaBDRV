@@ -35,8 +35,13 @@ public class JDialogTest extends JDialog {
     private JTextField NameService;
     private JTextField IntervalScheduler;
     private JButton createEXEButton;
+    private JTextField PathToFileOfService;
+    private JTextField EncodingStruna;
 
     public JDialogTest() {
+
+        String root = System.getProperty("user.dir");
+
         setContentPane(contentPane);
         setModal(true);
         setResizable(false);
@@ -74,7 +79,6 @@ public class JDialogTest extends JDialog {
             public void actionPerformed(ActionEvent e) {
                 try {
                     String command = "";
-                    String root = System.getProperty("user.dir");
 //                    String javaHome = System.getProperty("java.home");
 //                    System.out.println(javaHome);
 //                    String sysdir = System.getenv("WINDIR") + "\\system32\\";
@@ -130,12 +134,14 @@ public class JDialogTest extends JDialog {
         UProperties.setProperty("ServerPortStruna", ServerPortStruna.getText());
         UProperties.setProperty("PathToDbStruna", PathToDbStruna.getText());
         UProperties.setProperty("UsernameStruna", UsernameStruna.getText());
+        UProperties.setProperty("EncodingStruna", EncodingStruna.getText());
         String strPasswordStruna  = new String(PasswordStruna.getPassword());
         if(!strPasswordStruna.isEmpty()) UProperties.setProperty("PasswordStruna", strPasswordStruna);
 
         // Service
         UProperties.setProperty("NameService", NameService.getText());
         UProperties.setProperty("IntervalScheduler", IntervalScheduler.getText());
+        UProperties.setProperty("PathToFileOfService", PathToFileOfService.getText());
 
     }
 
@@ -152,10 +158,12 @@ public class JDialogTest extends JDialog {
         ServerPortStruna.setText(UProperties.getProperty("ServerPortStruna"));
         PathToDbStruna.setText(UProperties.getProperty("PathToDbStruna"));
         UsernameStruna.setText(UProperties.getProperty("UsernameStruna"));
+        UsernameStruna.setText(UProperties.getProperty("EncodingStruna"));
 
         // Service
         NameService.setText(UProperties.getProperty("NameService"));
         IntervalScheduler.setText(UProperties.getProperty("IntervalScheduler"));
+        PathToFileOfService.setText(UProperties.getProperty("PathToFileOfService"));
 
     }
 

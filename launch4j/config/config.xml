@@ -2,8 +2,8 @@
 <launch4jConfig>
   <dontWrapJar>false</dontWrapJar>
   <headerType>gui</headerType>
-  <jar>C:\ULTRA\WORK\ИТСК\СТРУНА\JStrunaBDRV\out\artifacts\JStrunaBDRV1_jar\test.jar</jar>
-  <outfile>C:\ULTRA\test.exe</outfile>
+  <jar>C:\ULTRA\Service.jar</jar>
+  <outfile>C:\ULTRA\Service.exe</outfile>
   <errTitle></errTitle>
   <cmdLine></cmdLine>
   <chdir>.</chdir>
