@@ -9,17 +9,17 @@ import java.util.Properties;
 public class UProperties {
 
     static Properties properties = new Properties();
-    static File file = new File("properties.properties");
+    static File file = new File(System.getProperty("user.dir") + "\\properties.properties");
 
     UProperties(){
-        getPropety("");
+        getProperty("");
     }
 
     public static void main(String[] args) {
         loadProperties();
     }
 
-    static boolean loadProperties(){
+    public static boolean loadProperties(){
 
         if(!createFileProperties()) return false;
 
@@ -46,11 +46,11 @@ public class UProperties {
 
     static void initPropeties(){}
 
-    public static String getPropety(String name){
+    public static String getProperty(String name){
         return properties.getProperty(name) == null ? "" : properties.getProperty(name);
     }
 
-    static boolean setPropety(String name, String value){
+    static boolean setProperty(String name, String value){
         try {
             properties.setProperty(name, value);
             properties.store(new FileOutputStream(file), null);
@@ -59,10 +59,6 @@ public class UProperties {
             return false;
         }
         return true;
-    }
-
-    public String getPropety1(String name){
-        return getPropety(name);
     }
 
 }

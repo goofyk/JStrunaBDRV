@@ -1,62 +1,57 @@
 package UServicePack;
 
+import UMainPack.UProperties;
+
 import java.io.*;
 import java.util.*;
 
 public class UServiceTask {
 
+    private static Timer timer = new Timer();
+    private static boolean shedulerIsRun = false;
+    private static int intervalScheduler = 60000;
+
     public static void main(String[] args) {
-        int intervalScheduler = 5000;
-//        if(!UProperties.getPropety("IntervalScheduler").isEmpty()){
+
+        UProperties.loadProperties();
+
+        //if(timer != null) timer.cancel();
+
+        int intervalPropScheduler = intervalScheduler;
+        if(!UProperties.getProperty("IntervalScheduler").isEmpty()){
+            intervalPropScheduler = Integer.valueOf(UProperties.getProperty("IntervalScheduler"));
 //            try {
-//                intervalScheduler = Integer.valueOf(UProperties.getPropety("Interval"));
-//            }catch (Exception e){
+//                writeToFile("UProp.intervalPropScheduler = " + intervalPropScheduler, "test2");
+//            } catch (IOException e) {
 //                e.printStackTrace();
 //            }
-//
-//        }
-        new UServiceTask(intervalScheduler);
-//        try {
-//            //writeToFile(args[0]);
-//            writeToFile(String.valueOf(intervalScheduler));
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-    }
+        }
 
-//    public static void writeToFile(String text) throws IOException {
-//        BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("C:\\ULTRA\\test.txt"), "UTF-8"));
-//        out.write(text);
-//        out.close();
-//    }
+        //if(args.length > 0) intervalScheduler = Integer.valueOf(args[0]);
 
-    UServiceTask(int interval) {
-        //if(interval == 0) return;
-        Timer timer = new Timer();
-        timer.schedule(new UServiceTaskHandler(), 0, interval);
-//        int intervalScheduler = 5000;
-//        try {
-//            //writeToFile(args[0]);
-//            writeToFile(String.valueOf(intervalScheduler));
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-    }
-}
+        if(intervalScheduler == 0) return;
 
-class UServiceTaskHandler extends TimerTask {
-
-    public void run() {
-        try {
-            writeToFile("Hi");
-        } catch (IOException e) {
-            e.printStackTrace();
+        if(intervalPropScheduler != intervalScheduler){
+            intervalScheduler = intervalPropScheduler;
+            runScheduler();
+            shedulerIsRun = true;
         }
     }
 
-    public void writeToFile(String text) throws IOException {
-        BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("C:\\ULTRA\\test.txt"), "UTF-8"));
+    public static void runScheduler() {
+        timer.schedule(new UServiceTaskHandler(intervalScheduler), 0, intervalScheduler);
+//        writeToFile("Sheduler runned with interval = " + String.valueOf(intervalScheduler), "test3");
+    }
+
+    public static void writeToFile(String text, String  nameFile) throws IOException {
+        BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("C:\\ULTRA\\" + nameFile + ".txt"), "UTF-8"));
         out.write(text);
         out.close();
     }
+
+    UServiceTask(int interval) {
+        if(interval == 0) return;
+        timer.schedule(new UServiceTaskHandler(interval), 0, interval);
+    }
 }
+

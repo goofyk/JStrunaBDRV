@@ -100,7 +100,7 @@ public class JDialogTest extends JDialog {
     }
 
     private void onOK() {
-        savePropeties();
+        saveProperties();
         this.dispose();
     }
 
@@ -115,47 +115,47 @@ public class JDialogTest extends JDialog {
         System.exit(0);
     }
 
-    public void savePropeties() {
+    public void saveProperties() {
 
         // BDRV
-        UProperties.setPropety("ServerNameBDRV", ServerNameBDRV.getText());
-        UProperties.setPropety("ServerPortBDRV", ServerPortBDRV.getText());
-        UProperties.setPropety("NameDbBDRV", NameDbBDRV.getText());
-        UProperties.setPropety("UsernameBDRV", UsernameBDRV.getText());
+        UProperties.setProperty("ServerNameBDRV", ServerNameBDRV.getText());
+        UProperties.setProperty("ServerPortBDRV", ServerPortBDRV.getText());
+        UProperties.setProperty("NameDbBDRV", NameDbBDRV.getText());
+        UProperties.setProperty("UsernameBDRV", UsernameBDRV.getText());
         String strPasswordBDRV  = new String(PasswordBDRV.getPassword());
-        if(!strPasswordBDRV.isEmpty()) UProperties.setPropety("PasswordBDRV", strPasswordBDRV);
+        if(!strPasswordBDRV.isEmpty()) UProperties.setProperty("PasswordBDRV", strPasswordBDRV);
 
         // Struna
-        UProperties.setPropety("ServerNameStruna", ServerNameStruna.getText());
-        UProperties.setPropety("ServerPortStruna", ServerPortStruna.getText());
-        UProperties.setPropety("PathToDbStruna", PathToDbStruna.getText());
-        UProperties.setPropety("UsernameStruna", UsernameStruna.getText());
+        UProperties.setProperty("ServerNameStruna", ServerNameStruna.getText());
+        UProperties.setProperty("ServerPortStruna", ServerPortStruna.getText());
+        UProperties.setProperty("PathToDbStruna", PathToDbStruna.getText());
+        UProperties.setProperty("UsernameStruna", UsernameStruna.getText());
         String strPasswordStruna  = new String(PasswordStruna.getPassword());
-        if(!strPasswordStruna.isEmpty()) UProperties.setPropety("PasswordStruna", strPasswordStruna);
+        if(!strPasswordStruna.isEmpty()) UProperties.setProperty("PasswordStruna", strPasswordStruna);
 
         // Service
-        UProperties.setPropety("NameService", NameService.getText());
-        UProperties.setPropety("IntervalScheduler", IntervalScheduler.getText());
+        UProperties.setProperty("NameService", NameService.getText());
+        UProperties.setProperty("IntervalScheduler", IntervalScheduler.getText());
 
     }
 
     public void loadProperties(){
 
         // BDRV
-        ServerNameBDRV.setText(UProperties.getPropety("ServerNameBDRV"));
-        ServerPortBDRV.setText(UProperties.getPropety("ServerPortBDRV"));
-        NameDbBDRV.setText(UProperties.getPropety("NameDbBDRV"));
-        UsernameBDRV.setText(UProperties.getPropety("UsernameBDRV"));
+        ServerNameBDRV.setText(UProperties.getProperty("ServerNameBDRV"));
+        ServerPortBDRV.setText(UProperties.getProperty("ServerPortBDRV"));
+        NameDbBDRV.setText(UProperties.getProperty("NameDbBDRV"));
+        UsernameBDRV.setText(UProperties.getProperty("UsernameBDRV"));
 
         // Struna
-        ServerNameStruna.setText(UProperties.getPropety("ServerNameStruna"));
-        ServerPortStruna.setText(UProperties.getPropety("ServerPortStruna"));
-        PathToDbStruna.setText(UProperties.getPropety("PathToDbStruna"));
-        UsernameStruna.setText(UProperties.getPropety("UsernameStruna"));
+        ServerNameStruna.setText(UProperties.getProperty("ServerNameStruna"));
+        ServerPortStruna.setText(UProperties.getProperty("ServerPortStruna"));
+        PathToDbStruna.setText(UProperties.getProperty("PathToDbStruna"));
+        UsernameStruna.setText(UProperties.getProperty("UsernameStruna"));
 
         // Service
-        NameService.setText(UProperties.getPropety("NameService"));
-        IntervalScheduler.setText(UProperties.getPropety("IntervalScheduler"));
+        NameService.setText(UProperties.getProperty("NameService"));
+        IntervalScheduler.setText(UProperties.getProperty("IntervalScheduler"));
 
     }
 

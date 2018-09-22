@@ -201,7 +201,7 @@ public class UFormMain extends JFrame {
     }
 
     private void updateNameService(){
-        if(!UProperties.getPropety("NameService").isEmpty()) nameOfService = UProperties.getPropety("NameService");
+        if(!UProperties.getProperty("NameService").isEmpty()) nameOfService = UProperties.getProperty("NameService");
     }
 
     private void inform(String message, String title){
