@@ -20,7 +20,7 @@ public class UFormMain extends JFrame {
     private JButton buttonUpdateTable = createButton("Update table", dimSizeBtn);
     private JButton buttonRunInit = createButton("Run init", dimSizeBtn);
     private JButton buttonSettings = createButton("Settings", dimSizeBtn);
-    private JTable table = new JTable(USqlite.buildTableModel(USqlite.getAllDataLogs(0)));
+    private JTable table = new JTable(USqlite.getBuildTableModel(USqlite.getAllDataLogs(0)));
     Timer timer = new Timer(10000, new actionListenerTimer());
     private String nameOfService = "StrunaBDRV";
     private String pathRoot = System.getProperty("user.dir");
@@ -79,7 +79,7 @@ public class UFormMain extends JFrame {
     }
 
     private void updateTableLogs(int countTop){
-        table.setModel(USqlite.buildTableModel(USqlite.getAllDataLogs(0)));
+        table.setModel(USqlite.getBuildTableModel(USqlite.getAllDataLogs(0)));
     }
 
     class ButtonEventListener implements ActionListener {

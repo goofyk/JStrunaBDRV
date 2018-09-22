@@ -78,7 +78,7 @@ public class USqlite {
         return rs;
     }
 
-    public static DefaultTableModel buildTableModel(ResultSet rs) {
+    public static DefaultTableModel getBuildTableModel(ResultSet rs) {
 
         if(rs == null) return new DefaultTableModel();
 
