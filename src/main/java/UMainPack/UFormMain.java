@@ -2,8 +2,6 @@ package UMainPack;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 
 public class UFormMain extends JFrame{
@@ -30,56 +28,18 @@ public class UFormMain extends JFrame{
         setLocationRelativeTo(null);
         Container container = getContentPane();
 
-        btnInstallService.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                installService();
-            }
+        btnInstallService.addActionListener(e -> installService());
+        btnRemoveService.addActionListener(e -> {
+            stopService();
+            removeService();
         });
-        btnRemoveService.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                stopService();
-                removeService();
-            }
-        });
-        btnStartService.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                startService();
-            }
-        });
-        btnStopService.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                stopService();
-            }
-        });
-        btnRestartService.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                restartService();
-            }
-        });
-        settingsButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                openDialogSetting();
-            }
-        });
-        updateButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                updateTableLogs(0);
-            }
-        });
+        btnStartService.addActionListener(e -> startService());
+        btnStopService.addActionListener(e -> stopService());
+        btnRestartService.addActionListener(e -> restartService());
+        settingsButton.addActionListener(e -> openDialogSetting());
+        updateButton.addActionListener(e -> updateTableLogs(0));
 
-        Timer timer = new Timer(10000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                updateTableLogs(200);
-            }
-        });
+        Timer timer = new Timer(10000, e -> updateTableLogs(200));
 
         timer.start();
 
