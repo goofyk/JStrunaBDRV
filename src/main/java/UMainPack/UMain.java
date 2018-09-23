@@ -1,15 +1,17 @@
 package UMainPack;
 
 import org.apache.log4j.PropertyConfigurator;
-import net.sf.launch4j.*;
+
+import javax.swing.*;
 
 public class UMain {
+
+    public static JFrame mainForm = new UFormMain();
 
     public static void main(String[] args) {
         PropertyConfigurator.configure("ULogger.properties");
         UProperties.loadProperties();
-        UFormMain objUForm = new UFormMain();
-        objUForm.setVisible(true);
+        mainForm.setVisible(true);
     }
 
 }

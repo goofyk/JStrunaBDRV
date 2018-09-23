@@ -1,12 +1,7 @@
 package UMainPack;
 
-import net.sf.launch4j.Builder;
-import net.sf.launch4j.BuilderException;
-import net.sf.launch4j.Log;
-import net.sf.launch4j.config.ConfigPersister;
-import net.sf.launch4j.config.ConfigPersisterException;
-
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
@@ -14,7 +9,7 @@ import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-public class JDialogTest extends JDialog {
+public class UDialogSettings extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
@@ -38,10 +33,17 @@ public class JDialogTest extends JDialog {
     private JTextField PathToFileOfService;
     private JTextField EncodingStruna;
 
-    public JDialogTest() {
+    public static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    public static int sizeWidth = 800;
+    public static int sizeHeight = 600;
+    public static int locationX = (screenSize.width - sizeWidth) / 2;
+    public static int locationY = (screenSize.height - sizeHeight) / 2;
+
+    public UDialogSettings() {
 
         String root = System.getProperty("user.dir");
-
+        //setLocationRelativeTo(UMain.mainForm);
+        setBounds(locationX, locationY, this.getWidth(), this.getHeight());
         setContentPane(contentPane);
         setModal(true);
         setResizable(false);
@@ -113,7 +115,7 @@ public class JDialogTest extends JDialog {
     }
 
     public static void main(String[] args) {
-        JDialogTest dialog = new JDialogTest();
+        UDialogSettings dialog = new UDialogSettings();
         dialog.pack();
         dialog.setVisible(true);
         System.exit(0);
@@ -158,7 +160,7 @@ public class JDialogTest extends JDialog {
         ServerPortStruna.setText(UProperties.getProperty("ServerPortStruna"));
         PathToDbStruna.setText(UProperties.getProperty("PathToDbStruna"));
         UsernameStruna.setText(UProperties.getProperty("UsernameStruna"));
-        UsernameStruna.setText(UProperties.getProperty("EncodingStruna"));
+        EncodingStruna.setText(UProperties.getProperty("EncodingStruna"));
 
         // Service
         NameService.setText(UProperties.getProperty("NameService"));

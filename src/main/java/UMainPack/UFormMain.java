@@ -1,221 +1,171 @@
 package UMainPack;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.sql.ResultSet;
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
 
-public class UFormMain extends JFrame {
+public class UFormMain extends JFrame{
+    private JTable UTableLog;
+    private JButton btnInstallService;
+    private JButton btnRemoveService;
+    private JButton btnStartService;
+    private JButton btnStopService;
+    private JButton btnRestartService;
+    private JButton updateButton;
+    private JButton settingsButton;
+    private JPanel JPanelMain;
+    private JPanel JPanelSidebarL;
 
-    private Dimension dimSizeBtn = new Dimension(200, 30);
-    private JButton button = createButton("Info", dimSizeBtn);
-    private JButton buttonStartService = createButton("Start", dimSizeBtn);
-    private JButton buttonStopService = createButton("Stop", dimSizeBtn);
-    private JButton buttonRestartService = createButton("Restart", dimSizeBtn);
-    private JButton buttonCreateService = createButton("Create service", dimSizeBtn);
-    private JButton buttonDeleteService = createButton("Delete service", dimSizeBtn);
-    private JButton buttonUpdateTable = createButton("Update table", dimSizeBtn);
-    private JButton buttonRunInit = createButton("Run init", dimSizeBtn);
-    private JButton buttonSettings = createButton("Settings", dimSizeBtn);
-    private JTable table = new JTable(USqlite.getBuildTableModel(USqlite.getAllDataLogs(0)));
-    Timer timer = new Timer(10000, new actionListenerTimer());
     private String nameOfService = "StrunaBDRV";
     private String pathRoot = System.getProperty("user.dir");
-    private String pathToFileOfService = pathRoot + "\\Service.exe";
+    private String pathToFileOfService = pathRoot + "\\service\\Service.exe";
 
     public UFormMain() {
 
         super("Struna - BDRV");
-        this.setBounds(100,100,500,500);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(new Dimension(800, 600));
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+        Container container = getContentPane();
 
-        Container container = this.getContentPane();
+        btnInstallService.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                installService();
+            }
+        });
+        btnRemoveService.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                stopService();
+                removeService();
+            }
+        });
+        btnStartService.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                startService();
+            }
+        });
+        btnStopService.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                stopService();
+            }
+        });
+        btnRestartService.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                restartService();
+            }
+        });
+        settingsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                openDialogSetting();
+            }
+        });
+        updateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updateTableLogs(0);
+            }
+        });
 
-        button.addActionListener(new ButtonEventListener());
-        buttonStartService.addActionListener(new ButtonEventListenerStartService());
-        buttonStopService.addActionListener(new ButtonEventListenerStopService());
-        buttonRestartService.addActionListener(new ButtonEventListenerRestartService());
-        buttonCreateService.addActionListener(new ButtonEventListenerCreateService());
-        buttonDeleteService.addActionListener(new ButtonEventListenerDeleteService());
-        buttonUpdateTable.addActionListener(new ButtonEventListenerUpdateTable());
-        buttonRunInit.addActionListener(new ButtonEventListenerRunInit());
-        buttonSettings.addActionListener(new ButtonEventListenerSettings());
-
-        JPanel panelBtn = new JPanel();
-        panelBtn.setLayout(new BoxLayout(panelBtn, BoxLayout.Y_AXIS));
-
-        panelBtn.add(button);
-        panelBtn.add(buttonStartService);
-        panelBtn.add(buttonStopService);
-        panelBtn.add(buttonRestartService);
-        panelBtn.add(buttonCreateService);
-        panelBtn.add(buttonDeleteService);
-        panelBtn.add(buttonUpdateTable);
-        panelBtn.add(buttonRunInit);
-        panelBtn.add(buttonSettings);
-
-        JTextArea textArea = new JTextArea();
-        textArea.setWrapStyleWord(true);
-
-        JScrollPane jscrlp = new JScrollPane(table);
-
-        container.add(BorderLayout.WEST, panelBtn);
-//        container.add(BorderLayout.CENTER, textArea);
-        container.add(BorderLayout.CENTER, jscrlp);
+        Timer timer = new Timer(10000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updateTableLogs(200);
+            }
+        });
 
         timer.start();
 
+        container.add(JPanelMain);
+
     }
 
-    private JButton createButton(String text, Dimension size) {
-        JButton button = new JButton(text);
-        button.setPreferredSize(size);
-        button.setMinimumSize(size);
-        button.setMaximumSize(size);
-        return button;
+    /**
+     *  HANDLER LISTENERS
+     */
+
+    private void installService(){
+        updateNameService();
+        runCommandService("install");
     }
 
-    private void updateTableLogs(int countTop){
-        table.setModel(USqlite.getBuildTableModel(USqlite.getAllDataLogs(0)));
-    }
+    private void removeService(){
+        updateNameService();
+        runCommandService("remove");
+    };
 
-    class ButtonEventListener implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-            String message = pathRoot;
-//            message += "Button was pressed\n";
-//            message += "Text is " + input.getText() + "\n";
-//            message += (radio1.isSelected()?"Radio #1":"Radio #2")
-//                    + " is selected\n";
-//            message += "CheckBox is " + ((check.isSelected())
-//                    ?"checked":"unchecked");
-            JOptionPane.showMessageDialog(null,
-                    message,
-                    "Output",
-                    JOptionPane.PLAIN_MESSAGE);
-        }
-    }
+    private void startService(){
+        updateNameService();
+        runCommandService("start");
+    };
 
-    class actionListenerTimer implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            updateTableLogs(200);
-        }
-    }
+    private void stopService(){
+        updateNameService();
+        runCommandService("stop");
+    };
 
-    class ButtonEventListenerStartService implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-            try {
-                updateNameService();
-                String command = pathRoot + "\\nssm\\win64\\nssm.exe start " + nameOfService;
-                Runtime.getRuntime().exec(command);
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-        }
-    }
-
-    class ButtonEventListenerStopService implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-            try {
-                updateNameService();
-                String command = pathRoot + "\\nssm\\win64\\nssm.exe stop " + nameOfService;
-                Runtime.getRuntime().exec(command);
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-        }
-    }
-
-    class ButtonEventListenerRestartService implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-            try {
-                updateNameService();
-                String command = pathRoot + "\\nssm\\win64\\nssm.exe restart " + nameOfService;
-                Runtime.getRuntime().exec(command);
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-        }
-    }
-
-    class ButtonEventListenerCreateService implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-            try {
-                updateNameService();
-                String command = pathRoot + "\\nssm\\win64\\nssm.exe install " + nameOfService + " " + pathToFileOfService;
-                Runtime.getRuntime().exec(command);
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-        }
-    }
-
-    class ButtonEventListenerDeleteService implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-            try {
-                updateNameService();
-                String command = pathRoot + "\\nssm\\win64\\nssm.exe remove " + nameOfService;
-                Runtime.getRuntime().exec(command);
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-        }
-    }
-
-    class ButtonEventListenerUpdateTable implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-            updateTableLogs(1);
-        }
-    }
-
-    class ButtonEventListenerRunInit implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-//            initProgramm();
-            try {
-                updateNameService();
-                //String command = System.getProperty("user.dir") + "\\nssm\\win64\\nssm.exe status " + nameOfService;
-                String command = pathRoot + "\\nssm\\win64\\nssm.exe status MySQL57";
-                Process proc = Runtime.getRuntime().exec(command);
-                BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
-                BufferedReader stdError = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
-                String messageInput = "";
-                String messageError = "";
-                String s = null;
-                while ((s = stdInput.readLine()) != null) { messageInput += s + "\n"; }
-                while ((s = stdError.readLine()) != null) { messageError += s + "\n"; }
-                if(!messageInput.isEmpty())inform(messageInput, null);
-                if(!messageError.isEmpty())inform(messageError, "Error");
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-
-        }
-    }
-    class ButtonEventListenerSettings implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-            JDialogTest dialog = new JDialogTest();
-            dialog.pack();
-            dialog.setModal(true);
-            dialog.setVisible(true);
-        }
-    }
-
-    private void initProgramm() {
-    }
+    private void restartService(){
+        updateNameService();
+        runCommandService("restart");
+    };
 
     private void updateNameService(){
         if(!UProperties.getProperty("NameService").isEmpty()) nameOfService = UProperties.getProperty("NameService");
-    }
+    };
 
-    private void inform(String message, String title){
-        if(title == null) title = "Output";
-        JOptionPane.showMessageDialog(null,
-                message,
-                title,
-                JOptionPane.PLAIN_MESSAGE);
-    }
+    private void runCommandService(String command){
+        switch (command){
+            case "install":
+                execCommandService(command);
+                break;
+
+            case "remove":
+                execCommandService(command);
+                break;
+
+            case "start":
+                execCommandService(command);
+                break;
+
+            case "stop":
+                execCommandService(command);
+                break;
+
+            case "restart":
+                execCommandService(command);
+                break;
+        }
+    };
+
+    private Process execCommandService(String command){
+
+        String fullCommand = pathRoot + "\\nssm\\win64\\nssm.exe " + command + " " + nameOfService;
+        if(command.equals("install")){ fullCommand = fullCommand + " " + pathToFileOfService;}
+        Process proc = null;
+        try {
+            proc = Runtime.getRuntime().exec(fullCommand);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return proc;
+    };
+
+    private void updateTableLogs(int countTop){
+        UTableLog.setModel(USqlite.getBuildTableModel(USqlite.getAllDataLogs(0)));
+    };
+
+    private void openDialogSetting(){
+        UDialogSettings dialogSettings = new UDialogSettings();
+        dialogSettings.pack();
+        dialogSettings.setModal(true);
+        dialogSettings.setVisible(true);
+    };
 
 }
