@@ -37,17 +37,9 @@ public class UDialodAddMatches extends JDialog {
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         getRootPane().setDefaultButton(buttonOK);
 
-        buttonOK.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onOK();
-            }
-        });
+        buttonOK.addActionListener(e -> onOK());
 
-        buttonCancel.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onCancel();
-            }
-        });
+        buttonCancel.addActionListener(e -> onCancel());
 
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
@@ -56,20 +48,11 @@ public class UDialodAddMatches extends JDialog {
             }
         });
 
-        contentPane.registerKeyboardAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onCancel();
-            }
-        }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        contentPane.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 
         tableMatches.setModel(USqlite.getBuildTableModel(USqlite.getAllDataMatches()));
 
-        addButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                addNewRow();
-            }
-        });
+        addButton.addActionListener(e -> addNewRow());
     }
 
     private void addNewRow() {
@@ -79,6 +62,7 @@ public class UDialodAddMatches extends JDialog {
 
     private void onOK() {
         USqlite.cleareTable("MatchStrunaBDRV");
+        USqlite.createTableMatchStrunaBDRV();
         USqlite.insertDataToDBFromTable((TableModel) tableMatches.getModel());
         this.setVisible(false);
     }

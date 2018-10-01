@@ -55,10 +55,11 @@ public class USqlite {
 
     public static void cleareTable(String tableName) {
         String url = "jdbc:sqlite:" + fileName;
-        String sql = new String("DELETE FROM " + tableName + ";");
+        //String sql = new String("DELETE FROM " + tableName + ";");
+        String sql = new String("DROP TABLE " + tableName + ";");
         try (Connection conn = DriverManager.getConnection(url);
              Statement stmt = conn.createStatement()) {
-            stmt.execute(sql);
+             stmt.execute(sql);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -68,7 +69,9 @@ public class USqlite {
 
         String url = "jdbc:sqlite:" + fileName;
 
-        try (Connection conn = DriverManager.getConnection(url)){
+        try{
+
+            Connection conn = DriverManager.getConnection(url);
 
             conn.setAutoCommit(false);
 
@@ -98,9 +101,9 @@ public class USqlite {
     public static void createTableMatchStrunaBDRV() {
         String url = "jdbc:sqlite:" + fileName;
         String sql = new String("CREATE TABLE IF NOT EXISTS MatchStrunaBDRV\n" +
-                "   (STRUNA_ID_OBJ VARCHAR(1)    NOT NULL,\n" +
+                "   (STRUNA_ID_OBJ VARCHAR(25)    NOT NULL,\n" +
                 "    STRUNA_P_NAME  VARCHAR(25)    NOT NULL,\n" +
-                "    BDRV_P_MSD_ID VARCHAR(20)  NOT NULL\n" +
+                "    BDRV_P_MSD_ID VARCHAR(25)\n" +
                 "   );");
         try (Connection conn = DriverManager.getConnection(url);
              Statement stmt = conn.createStatement()) {
