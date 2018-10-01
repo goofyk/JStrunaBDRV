@@ -1,7 +1,10 @@
 package UMainPack;
 
 import javax.swing.*;
+import javax.swing.table.JTableHeader;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 
 public class UFormMain extends JFrame{
@@ -14,7 +17,8 @@ public class UFormMain extends JFrame{
     private JButton updateButton;
     private JButton settingsButton;
     private JPanel JPanelMain;
-    private JPanel JPanelSidebarL;
+    private JPanel panelTable;
+    private JButton addMatchesButton;
 
     private String nameOfService = "StrunaBDRV";
     private String pathRoot = System.getProperty("user.dir");
@@ -27,6 +31,9 @@ public class UFormMain extends JFrame{
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         Container container = getContentPane();
+
+        JTableHeader header = UTableLog.getTableHeader();
+        panelTable.add(header, BorderLayout.NORTH);
 
         btnInstallService.addActionListener(e -> installService());
         btnRemoveService.addActionListener(e -> {
@@ -45,6 +52,12 @@ public class UFormMain extends JFrame{
 
         container.add(JPanelMain);
 
+        addMatchesButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                openDialogAddMatches();
+            }
+        });
     }
 
     /**
@@ -118,14 +131,20 @@ public class UFormMain extends JFrame{
     };
 
     private void updateTableLogs(int countTop){
+
         UTableLog.setModel(USqlite.getBuildTableModel(USqlite.getAllDataLogs(0)));
     };
 
     private void openDialogSetting(){
         UDialogSettings dialogSettings = new UDialogSettings();
         dialogSettings.pack();
-        dialogSettings.setModal(true);
         dialogSettings.setVisible(true);
+    };
+
+    private void openDialogAddMatches(){
+        UDialodAddMatches dialogAddMatches = new UDialodAddMatches();
+        dialogAddMatches.pack();
+        dialogAddMatches.setVisible(true);
     };
 
 }

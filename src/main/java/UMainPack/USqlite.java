@@ -1,17 +1,15 @@
 package UMainPack;
 
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import java.sql.*;
 import java.util.Vector;
 
 public class USqlite {
 
-    public static void main(String[] args) {
-//        createNewDatabase("log.db");
-//        createTableLogs("log.db");
-    }
+    final static String fileName = "UStrunaBDRV.db";
 
-    public static void createNewDatabase(String fileName) {
+    public static void createNewDatabase() {
 
         String url = "jdbc:sqlite:" + fileName;
 
@@ -27,7 +25,7 @@ public class USqlite {
         }
     }
 
-    private static Connection connect(String fileName) {
+    private static Connection connect() {
         String url = "jdbc:sqlite:" + fileName;
         Connection conn = null;
         try {
@@ -38,17 +36,74 @@ public class USqlite {
         return conn;
     }
 
-    public static void createTableLogs(String fileName) {
+    public static void createTableLogs() {
         String url = "jdbc:sqlite:" + fileName;
-        String sql = "CREATE TABLE LOGS\n" +
+        String sql = new String("CREATE TABLE IF NOT EXISTS LOGS\n" +
                 "   (USER_ID VARCHAR(20)    NOT NULL,\n" +
                 "    DATED   DATE           NOT NULL,\n" +
                 "    LOGGER  VARCHAR(50)    NOT NULL,\n" +
                 "    LEVEL   VARCHAR(10)    NOT NULL,\n" +
                 "    MESSAGE VARCHAR(1000)  NOT NULL\n" +
-                "   );";
+                "   );");
         try (Connection conn = DriverManager.getConnection(url);
-            Statement stmt = conn.createStatement()) {
+             Statement stmt = conn.createStatement()) {
+            stmt.execute(sql);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void cleareTable(String tableName) {
+        String url = "jdbc:sqlite:" + fileName;
+        String sql = new String("DELETE FROM " + tableName + ";");
+        try (Connection conn = DriverManager.getConnection(url);
+             Statement stmt = conn.createStatement()) {
+            stmt.execute(sql);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void insertDataToDBFromTable(TableModel tableModel) {
+
+        String url = "jdbc:sqlite:" + fileName;
+
+        try (Connection conn = DriverManager.getConnection(url)){
+
+            conn.setAutoCommit(false);
+
+            String sql = "INSERT INTO MatchStrunaBDRV(STRUNA_ID_OBJ, STRUNA_P_NAME, BDRV_P_MSD_ID) VALUES (?,?,?)";
+
+            int rowCount = tableModel.getRowCount();
+
+            PreparedStatement pst = conn.prepareStatement(sql);
+
+            for(int row = 0; row < rowCount; row++){
+                String STRUNA_ID_OBJ = (String)tableModel.getValueAt(row, 0);
+                String STRUNA_P_NAME = (String)tableModel.getValueAt(row, 1);
+                String BDRV_P_MSD_ID = (String)tableModel.getValueAt(row, 2);
+                pst.setString(1, STRUNA_ID_OBJ);
+                pst.setString(2, STRUNA_P_NAME);
+                pst.setString(3, BDRV_P_MSD_ID);
+
+                pst.addBatch();
+            }
+            pst.executeBatch();
+            conn.commit();
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    public static void createTableMatchStrunaBDRV() {
+        String url = "jdbc:sqlite:" + fileName;
+        String sql = new String("CREATE TABLE IF NOT EXISTS MatchStrunaBDRV\n" +
+                "   (STRUNA_ID_OBJ VARCHAR(1)    NOT NULL,\n" +
+                "    STRUNA_P_NAME  VARCHAR(25)    NOT NULL,\n" +
+                "    BDRV_P_MSD_ID VARCHAR(20)  NOT NULL\n" +
+                "   );");
+        try (Connection conn = DriverManager.getConnection(url);
+             Statement stmt = conn.createStatement()) {
             stmt.execute(sql);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -62,7 +117,7 @@ public class USqlite {
         ResultSet rs = null;
         Connection conn = null;
         try {
-            conn = connect("log.db");
+            conn = connect();
             stmt = conn.createStatement();
             rs = stmt.executeQuery(sql);
 //            while (rs.next()) {
@@ -72,6 +127,21 @@ public class USqlite {
 //                        rs.getString("LEVEL") + "\t" +
 //                        rs.getString("MESSAGE"));
 //            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return rs;
+    }
+
+    public static ResultSet getAllDataMatches() {
+        String sql = "SELECT * FROM MatchStrunaBDRV";
+        Statement stmt = null;
+        ResultSet rs = null;
+        Connection conn = null;
+        try {
+            conn = connect();
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery(sql);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -108,6 +178,12 @@ public class USqlite {
 
         return new DefaultTableModel(data, columnNames);
 
+    }
+
+    static {
+        //createNewDatabase();
+        createTableLogs();
+        createTableMatchStrunaBDRV();
     }
 
 }
